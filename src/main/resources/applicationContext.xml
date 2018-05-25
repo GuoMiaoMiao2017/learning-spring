@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!--扫描com.factory包下的注解，方便在类中注入-->
+    <context:component-scan base-package="com.guomiaomiao.learning.factory" annotation-config="true"/>
+    <context:property-placeholder location="datasource.properties"/>
+    <!--destroy-method="close"的作用是当数据库连接不使用的时候,就把该连接重新放到数据池中,方便下次使用调用.-->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${db.driverClassName}"/>
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+        <!-- 连接池启动时的初始值 -->
+        <property name="initialSize" value="${db.initialSize}"/>
+        <!-- 连接池的最大值 -->
+        <property name="maxActive" value="${db.maxActive}"/>
+        <!-- 最大空闲值.当经过一个高峰时间后，连接池可以慢慢将已经用不到的连接慢慢释放一部分，一直减少到maxIdle为止 -->
+        <property name="maxIdle" value="${db.maxIdle}"/>
+        <!-- 最小空闲值.当空闲的连接数少于阀值时，连接池就会预申请去一些连接，以免洪峰来时来不及申请 -->
+        <property name="minIdle" value="${db.minIdle}"/>
+        <!-- 最大建立连接等待时间。如果超过此时间将接到异常。设为－1表示无限制 -->
+        <property name="maxWait" value="${db.maxWait}"/>
+        <!--#给出一条简单的sql语句进行验证 -->
+        <!--<property name="validationQuery" value="select getdate()" />-->
+        <property name="defaultAutoCommit" value="${db.defaultAutoCommit}"/>
+        <!-- 回收被遗弃的（一般是忘了释放的）数据库连接到连接池中 -->
+        <!--<property name="removeAbandoned" value="true" />-->
+        <!-- 数据库连接过多长时间不用将被视为被遗弃而收回连接池中 -->
+        <!--<property name="removeAbandonedTimeout" value="120" />-->
+        <!-- #连接的超时时间，默认为半小时。 -->
+        <property name="minEvictableIdleTimeMillis" value="${db.minEvictableIdleTimeMillis}"/>
+
+        <!--# 失效检查线程运行时间间隔，要小于MySQL默认-->
+        <property name="timeBetweenEvictionRunsMillis" value="40000"/>
+        <!--# 检查连接是否有效-->
+        <property name="testWhileIdle" value="true"/>
+        <!--# 检查连接有效性的SQL语句-->
+        <property name="validationQuery" value="SELECT 1 FROM dual"/>
+    </bean>
+
+<!--配置bean-->
+    <bean id="person" class="com.guomiaomiao.learning.guomiaomiao.Person">
+        <property name="name" value="xiongzehua"></property>
+        <property name="list">
+            <list>
+                <ref bean="role"/>
+                <ref bean="role2"/>
+            </list>
+        </property>
+        <!--<property name="map">-->
+            <!--<map>-->
+                <!--<entry key-ref="address" value-ref="car"/>-->
+                <!--<entry key-ref="address2" value-ref="car2"/>-->
+            <!--</map>-->
+        <!--</property>-->
+        <property name="set">
+            <set>
+                <ref bean="role"/>
+                <ref bean="role2"/>
+            </set>
+        </property>
+    </bean>
+
+    <!--<bean id="person2" class="Person">-->
+        <!--<property name="name" value="guomiaomiao"></property>-->
+    <!--</bean>-->
+
+    <bean id="address" class="com.guomiaomiao.learning.guomiaomiao.Address">
+        <property name="city" value="beijing"/>
+        <property name="jiedao" value="wangfujing"/>
+    </bean>
+
+    <bean id="address2" class="com.guomiaomiao.learning.guomiaomiao.Address">
+        <property name="city" value="shanghai"/>
+        <property name="jiedao" value="balitun"/>
+    </bean>
+
+    <!--<bean id="car" class="com.guomiaomiao.Car" p:chepai="111" p:pinpai="beichi" p:price="2000" p:maxsudu="300"></bean>-->
+    <!--<bean id="car2" p:chepai="222" parent="car"></bean>-->
+
+    <bean id="role" class="com.guomiaomiao.learning.guomiaomiao.Role">
+        <property name="id" value="001"/>
+        <property name="note" value="001_note"/>
+        <property name="roleName" value="001_role_name"/>
+    </bean>
+
+    <bean id="role2" class="com.guomiaomiao.learning.guomiaomiao.Role">
+        <property name="id" value="002"/>
+        <property name="note" value="002_note"/>
+        <property name="roleName" value="002_role_name"/>
+    </bean>
+</beans>

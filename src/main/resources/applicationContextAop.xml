@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <context:component-scan base-package="com.study"/>
+    <!--<context:property-placeholder location="db.properties.properties"/>-->
+    <aop:aspectj-autoproxy/>
+
+    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">-->
+        <!--<property name="driverClassName" value="${driverClassName}"/>-->
+        <!--<property name="url" value="${url}"/>-->
+        <!--<property name="username" value="username"/>-->
+        <!--<property name="password" value="password"/>-->
+    <!--</bean>-->
+
+
+    <bean id="car1" class="com.guomiaomiao.learning.study.pojo.Car" p:pinpai="baoma" p:price="3000" p:sudu="250"></bean>
+    <bean id="car2" class="com.guomiaomiao.learning.study.pojo.Car" p:pinpai="changan" p:price="30000" p:sudu="550"></bean>
+    <bean id="car3" class="com.guomiaomiao.learning.study.pojo.Car">
+        <property name="pinpai" value="benchi"/>
+        <property name="price" value="5000"/>
+        <property name="sudu" value="350"/>
+    </bean>
+    <bean id="car4" class="com.guomiaomiao.learning.study.pojo.Car">
+        <property name="pinpai" value="laoyeche"/>
+        <property name="price" value="6000"/>
+        <property name="sudu" value="850"/>
+    </bean>
+
+    <util:list id="cars">
+        <ref bean="car3"/>
+        <ref bean="car4"/>
+    </util:list>
+
+    <bean id="guomiaomiao" class="com.guomiaomiao.learning.study.pojo.Person">
+        <property name="name" value="#{'guomiaomiao'}"/>
+        <property name="age" value="18"/>
+        <property name="carList">
+            <list>
+                <ref bean="car1"/>
+                <ref bean="car2"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="xiongzehua" class="com.guomiaomiao.learning.study.pojo.Person">
+        <property name="name" value="xiongzehua"/>
+        <property name="age" value="24"/>
+        <property name="carList" ref="cars"/>
+    </bean>
+
+</beans>
